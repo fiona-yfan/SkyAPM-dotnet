@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
+using Serilog;
 
 namespace SkyApm.Sample.Backend
 {
@@ -21,6 +22,13 @@ namespace SkyApm.Sample.Backend
 
         public static IHost BuildHost(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog((context, services, configuration) =>
+                    configuration
+                        .ReadFrom.Configuration(context.Configuration)
+                        .ReadFrom.Services(services)
+                        //.WriteTo.Diagnostic()
+                        //.Enrich.FromLogContext()
+                    )
                 .ConfigureWebHostDefaults(builder =>
                 {
                     builder.UseStartup<Startup>();

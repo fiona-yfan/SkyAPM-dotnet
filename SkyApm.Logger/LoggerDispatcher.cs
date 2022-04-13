@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -110,12 +111,13 @@ namespace SkyApm.Diagnostic.Logger
                 },
 
             };
-            if (context.Tags == null || context.Tags.Count <= 0) return request;
-            foreach (var kv in context.Tags)
-            {
-                request.LogTags.Add(kv);
-
+            if (context.Tags != null && context.Tags.Any()) {
+                foreach (var kv in context.Tags)
+                {
+                    request.LogTags.Add(kv);
+                }
             }
+
             return request;
         }
 

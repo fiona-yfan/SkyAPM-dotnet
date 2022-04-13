@@ -6,7 +6,7 @@ using SkyApm.Tracing;
 
 namespace SkyApm.Diagnostic.Logger
 {
-    public class LogDiagnosticProcessor : ITracingDiagnosticProcessor
+    public class MyLogDiagnosticProcessor : ITracingDiagnosticProcessor
     {
         public string ListenerName { get; } = LoggerDiagnosticConstants.ListenerName;
 
@@ -15,7 +15,7 @@ namespace SkyApm.Diagnostic.Logger
         private readonly IEntrySegmentContextAccessor _contextAccessor;
         //private readonly ILogDiagnosticHandler _diagnosticHandler;
         private readonly ILoggerDispatcher _dispatcher;
-        public LogDiagnosticProcessor(
+        public MyLogDiagnosticProcessor(
          //ITracingContext tracingContext
          IEntrySegmentContextAccessor contextAccessor
          , ILoggerDispatcher loggerDispatcher

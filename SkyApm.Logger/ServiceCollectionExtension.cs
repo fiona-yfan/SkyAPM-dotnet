@@ -13,8 +13,9 @@ namespace SkyApm.Diagnostic.Logger
             services.AddSingleton<ILoggerReporter, LoggerReporter>();
             services.AddSingleton<IExecutionService, LoggerService>();
             services.AddSingleton<ILoggerDispatcher, AsyncQueueLoggerDispatcher>();
-            services.AddSingleton<ITracingDiagnosticProcessor, LogDiagnosticProcessor>();
-            
+            services.AddSingleton<ITracingDiagnosticProcessor, MyLogDiagnosticProcessor>();
+            services.AddSingleton<ITracingDiagnosticProcessor, SerilogDiagnosticProcessor>();
+
             // todo rework ILogger diagnostic
             //services.AddTransient<IZwLogger, ZwLogger>();
             return services;
