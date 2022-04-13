@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SkyApm.Diagnostic.Logger;
 using SkyApm.Sample.Backend.Models;
 using SkyApm.Sample.Backend.Sampling;
 using SkyApm.Sample.Backend.Services;
@@ -38,9 +39,12 @@ namespace SkyApm.Sample.Backend
             services.AddEntityFrameworkSqlite().AddDbContext<SampleDbContext>(c => c.UseSqlite(sqlLiteConnection));
 
             services.AddSingleton<ISamplingInterceptor, CustomSamplingInterceptor>();
+            services.AddDiagnosticLogger();
 
             // DI grpc service
             services.AddSingleton<GreeterGrpcService>();
+
+         
 
 #if !NETCOREAPP2_1
 
@@ -54,6 +58,10 @@ namespace SkyApm.Sample.Backend
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/api/errors/error");
             }
 
             using (var scope = app.ApplicationServices.CreateScope())

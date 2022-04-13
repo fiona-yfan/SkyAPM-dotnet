@@ -7,6 +7,7 @@
     <PackageReference Include="Grpc.AspNetCore" Version="2.26.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SkyApm.Logger\SkyApm.Diagnostic.Logger.csproj" />
     <ProjectReference Include="..\..\src\SkyApm.Agent.AspNetCore\SkyApm.Agent.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\SkyApm.Diagnostics.EntityFrameworkCore.Sqlite\SkyApm.Diagnostics.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\grpc\SkyApm.Sample.GrpcProto\SkyApm.Sample.GrpcProto.csproj" />
