@@ -15,18 +15,20 @@ namespace Serilog.Sinks.DiagnosticSource
 
         private const string DiagnosticListenerName = "Serilog.Logger.DiagnosticListener";
         private const string DiagnosticName = "Serilog.Logger.Log";
-        private string[] IgnoreSourceContexts = { "Microsoft.AspNetCore.Server.Kestrel", "Microsoft.Hosting.Lifetime", "Microsoft.EntityFrameworkCore.Infrastructure" };
-        private string[] AllowTags = { "ActionName", "RequestPath", "EventId", "SpanId" };
-
+        private static readonly string[] IgnoreSourceContexts = { "Microsoft.AspNetCore.Server.Kestrel", "Microsoft.Hosting.Lifetime", "Microsoft.EntityFrameworkCore.Infrastructure" };
+        private static readonly string[] DefaultAllowTags = {
+            "ActionName", "RequestPath", "EventId", "SpanId"
+        };
+        private readonly string[] _allowTags;
         static readonly DiagnosticListener LoggerDiagnosticListener = new DiagnosticListener(DiagnosticListenerName);
 
         //private readonly IHttpContextAccessor _httpContextAccessor;
-        public DiagnosticSink(ITextFormatter textFormatter)
-        //, IHttpContextAccessor httpContextAccessor)
+        public DiagnosticSink(ITextFormatter textFormatter, string[] allowTags)
         {
             if (textFormatter == null) throw new ArgumentNullException(nameof(textFormatter));
             _textFormatter = textFormatter;
-            //_httpContextAccessor = httpContextAccessor;
+            _allowTags = allowTags ?? DefaultAllowTags;
+
         }
         public void Emit(LogEvent logEvent)
         {
@@ -61,7 +63,7 @@ namespace Serilog.Sinks.DiagnosticSource
             foreach (var prop in logEvent.Properties)
             {
 
-                if (AllowTags.Contains(prop.Key))
+                if (_allowTags.Contains(prop.Key))
                     props.Add(prop.Key, prop.Value.ToString().Trim('"'));
             }
             return props.ToList();

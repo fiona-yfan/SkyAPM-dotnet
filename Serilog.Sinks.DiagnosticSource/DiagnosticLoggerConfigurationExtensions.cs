@@ -10,32 +10,36 @@ using Serilog.Sinks.DiagnosticSource;
 
 namespace Serilog
 {
-   public static class DiagnosticLoggerConfigurationExtensions
+    public static class DiagnosticLoggerConfigurationExtensions
     {
-        const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message}{NewLine}{Exception}";
+        const string DefaultOutputTemplate =
+            "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message}{NewLine}{Exception}";
+
 
         public static LoggerConfiguration Diagnostic(
             this LoggerSinkConfiguration sinkConfiguration,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
             string outputTemplate = DefaultOutputTemplate,
+            string[] allowTags = null,
             IFormatProvider formatProvider = null,
             LoggingLevelSwitch levelSwitch = null)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
             if (outputTemplate == null) throw new ArgumentNullException(nameof(outputTemplate));
             var formatter = new MessageTemplateTextFormatter(outputTemplate, formatProvider);
-            return Diagnostic(sinkConfiguration, formatter, restrictedToMinimumLevel, levelSwitch);
+            return Diagnostic(sinkConfiguration, formatter, allowTags, restrictedToMinimumLevel, levelSwitch);
         }
 
         public static LoggerConfiguration Diagnostic(
             this LoggerSinkConfiguration sinkConfiguration,
             ITextFormatter formatter,
+            string[] allowTags = null,
             LogEventLevel restrictedToMinimumLevel = LevelAlias.Minimum,
             LoggingLevelSwitch levelSwitch = null)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
             if (formatter == null) throw new ArgumentNullException(nameof(formatter));
-            return sinkConfiguration.Sink(new DiagnosticSink(formatter), restrictedToMinimumLevel, levelSwitch);
+            return sinkConfiguration.Sink(new DiagnosticSink(formatter, allowTags), restrictedToMinimumLevel, levelSwitch);
         }
     }
 }
